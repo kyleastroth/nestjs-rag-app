@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 
 // Note: Services contain business logic (controllers handle HTTP and services handle the actual work)
 @Injectable()   // Makes this available for dependency injection
