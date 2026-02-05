@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService } from './services/app.service';
 
 
 // Note: Controllers handle incoming HTTP requests and return reponses

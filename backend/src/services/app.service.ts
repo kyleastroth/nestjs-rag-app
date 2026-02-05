@@ -1,32 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { RagService } from './rag.service';
 
 // Note: Services contain business logic (controllers handle HTTP and services handle the actual work)
 @Injectable()   // Makes this available for dependency injection
 export class AppService {
-    private model: ChatGoogleGenerativeAI;
-
-    constructor() {
-        // Initialize Gemini model w API key
-        this.model = new ChatGoogleGenerativeAI({
-            apiKey: process.env.GEMINI_API_KEY,
-            model: 'gemini-2.5-flash',
-            temperature: 0.7
-        });
-    }
+    // Inject RAG service
+    constructor(private readonly ragService: RagService) {}
 
     // Business logic - controller calls this, kieeps routes clean
-    // TODO: Implement RAG logic with LangChain
     async processQuery(question: string) {
+        console.log('Received question:', question);
+
         try {
-            const response = await this.model.invoke(question);
+            const result = await this.ragService.query(question);
 
             return {
-                question,
-                answer: response.content,
+                question: result.question,
+                answer: result.answer,
+                sources: result.sources.length,
             };
         } catch (error) {
-            console.error('Gemini API error:', error);
+            console.error('ERROR:', error);
             return {
                 question,
                 answer: 'Sorry, there was an error processing your question.',
